@@ -1,0 +1,53 @@
+	
+	 * @ResponseEntity : JSON 데이터와 HTTP 상태 메세지 반환
+	 * 
+	 * @RequestMapping : 특정 uri매칭되는 클래스나 메소드 명시
+	 * @PathVariable : url에서 원하는 정보 추출할때
+	 * @RequestParam : 요청에서 특정한 파라메터 값을 찾아낼 때
+
+	 * @RequestBody : 요청 문자열이 그대로 파라메터로 전달(매개변수로 JSON 데이터를 받는다고 생각),
+	 					HTTP 요청의 body 내용을 자바 객체로 매핑하는 역할을 합니다.
+	 * @ResponseBody : 리턴타입이 http의 응답 메시지(Json등)로 전송, 자바 객체를 HTTP 요청의 body 내용으로 매핑하는 역할을 합니다.
+
+	 * @ModelAttribute : 자동으로 해당 객체를 뷰까지 전달하게끔
+
+
+	netstat -a -o 후 8080포트 pid확인하고
+	
+	 Taskkill /PID <pid> /F	
+	
+	 public interface UserMapper{
+	@Select("select uname from User where uid=#{uid}")
+	public String getUname(@Param ("uid") String uid);
+	
+	public User getUserInfo(@Param ("uid") String uid);
+	
+	@Select("select * from User limit 100")
+	public List<User> Users();
+	
+
+	//////////////////////////// 안드로이드에서 버튼 전원 온오프(자동모드) 눌렀을때////////////////////////////////////
+    @GetMapping("/setpower") // 안드로이드가 전원 온오프 누를때 콜해야 할 주소
+    public HandleVO setAndroidPower(@RequestParam("power") int power) { // 아두이노에서 온 값을 @RequestBody는 자바객체로 만들어 vo담음
+
+        if (power <= 1) {       // 0: 종료(?) 1:자동제어  
+            isManual = false;
+            mode = power;
+        }   
+        else if(power == 2){    // 2:수동제어 
+            isManual = true;
+            mode = power;
+        }
+
+        if (isManual && power >= 3) // 3:위    4:아래   5:좌    6:우
+            mode = power;
+
+        handle.setPower(power);  
+                               
+        System.out.println("mode = " + mode);      
+        System.out.println("IsManual = " + isManual);      
+        
+        return handle;  //안드로이드에게 mode값 넘겨주기
+        }
+    }
+}
